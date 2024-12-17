@@ -16,7 +16,7 @@ const Cart = () => {
   const [status, setStatus] = useState(false);
   const [showLoginPage, setShowLoginPage] = useState(false);
 
-  const [isCheckoutOverlayOpen, setCheckoutOverlayOpen] = useState(false);
+  const [isCheckoutOverlayOpen, setCheckoutOverlayOpen] = useState(true);
   const [refresh, setRefresh] = useState(false);  
 
   // Calculations
