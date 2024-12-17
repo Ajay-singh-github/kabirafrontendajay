@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import orderSuccessImage from "../assets/ordersuccess.svg";
 import closeIcon from "../assets/icons/cancel.svg";
 import { deleteData, postData, serverURL } from "../services/FetchNodeServices";
@@ -9,12 +9,15 @@ import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 const CheckoutOverlay = ({ show, onClose, totalprice }) => {
   const orderData = useSelector((state) => state.orderData);
   const cartItems = Object.values(orderData || {});
+  
   // console.log("CHECKING DATA IN ROOT REDUCER:",cartItems)
   const dispatch = useDispatch();
 
   const [step, setStep] = useState(1);
   const [validfield, setValidField] = useState();
   const [loaderStatus, setLoaderStatus] = useState();
+  // const [fetchshippingaddress,setFetchShippingAddress]=useState([])
+  const [shippingid,setShippingId]=useState()
   const [address, setAddress] = useState({
     firstName: "",
     lastName: "",
@@ -229,13 +232,26 @@ const CheckoutOverlay = ({ show, onClose, totalprice }) => {
     onClose();
   };
 
+  // useEffect(async()=>{
+  //   const userid = JSON.parse(localStorage.getItem("USER"))?._id;
+  //   if(userid)
+  //   {
+  //     const response = await postData(
+  //       "shippingaddress/fetch_shipping_address_by_userid",
+  //       { userid: userid }
+  //     );
+  //     setFetchShippingAddress(response?.data)
+  //   }
+
+  // },[])
   const handleSetLoginIn = async () => {
     try {
-      const userid = JSON.parse(localStorage.getItem("USER"))._id;
+      const userid = JSON.parse(localStorage.getItem("USER"))?._id;
       const response = await postData(
         "shippingaddress/fetch_shipping_address_by_userid",
         { userid: userid }
       );
+      // console.log("WWWWWWWWWWWWWWWWWWWW:",response)
       if (response?.status) {
         const addressa = JSON.parse(response.data.address);
         address.firstName = addressa.firstName;
@@ -247,6 +263,8 @@ const CheckoutOverlay = ({ show, onClose, totalprice }) => {
         address.pincode = addressa.pincode;
         address.state = addressa.state;
         setLoggedIn(true);
+        setShippingId(response.data._id)
+
       } else {
         setLoggedIn(true);
       }
@@ -262,6 +280,25 @@ const CheckoutOverlay = ({ show, onClose, totalprice }) => {
     components: "buttons",
   };
 
+// const showAddress=async()=>{
+//   try {
+//     const userid = JSON.parse(localStorage.getItem("USER"))?._id;
+//     if(userid){
+//       const responsea = await postData(
+//         "shippingaddress/fetch_shipping_address_by_userid",
+//         { userid: userid }
+//       )
+
+//       setFetchShippingAddress(responsea?.data)
+//       console.log("DDDDDDDDDDDD:",responsea.data)
+//     }
+        
+//   } catch (error) {
+//     toast.error(response?.message);
+//   }
+  
+// }
+
 
 
   return (
@@ -270,6 +307,7 @@ const CheckoutOverlay = ({ show, onClose, totalprice }) => {
         show ? "transform translate-x-0" : "transform translate-x-full"
       } z-50`}
     >
+      
       <div className="flex justify-between items-center mb-4 sm:mb-8">
         <button className="p-2 bg-gray-100 rounded-full" onClick={onClose}>
           <img src={closeIcon} alt="Close" />
@@ -280,6 +318,8 @@ const CheckoutOverlay = ({ show, onClose, totalprice }) => {
       </div>
 
       <div className="w-full sm:w-[353px] h-full sm:h-[637px] flex flex-col mx-auto mt-6 sm:mt-11">
+        
+        {/* {showAddress()} */}
         {!loggedIn && (
           <div>
             {/* <h3 className="text-lg font-medium text-gray-800 mb-4 sm:mb-6">Please log in to proceed to checkout.</h3> */}
@@ -386,154 +426,36 @@ const CheckoutOverlay = ({ show, onClose, totalprice }) => {
             <h3 className="text-lg sm:text-xl font-medium text-gray-800 mb-4 sm:mb-6">
               Choose Payment Method
             </h3>
-            {/* <div className="flex items-center mb-4">
-              <input
-                type="radio"
-                value="credit"
-                checked={paymentMethod === "credit"}
-                onChange={handlePaymentMethodChange}
-                className="mr-2"
-              />
-              <label className="text-gray-700">Credit Card</label>
-            </div>
-
-            <div className="flex items-center mb-4">
-              <input
-                type="radio"
-                value="paypal"
-                checked={paymentMethod === "paypal"}
-                onChange={handlePaymentMethodChange}
-                className="mr-2"
-              />
-              <label className="text-gray-700">PayPal</label>
-            </div>
-
-            <div className="flex items-center mb-4">
-              <input
-                type="radio"
-                value="cash on delivery"
-                checked={paymentMethod === "cash on delivery"}
-                onChange={handlePaymentMethodChange}
-                className="mr-2"
-              />
-              <label className="text-gray-700">Cash On Delivery</label>
-            </div> */}
-            {/* <button */}
-            {/* onClick={proceedToNextStep} */}
-            {/* className="mt-4 w-full sm:w-auto h-16 bg-indigo-500 text-white rounded-full flex items-center justify-center" */}
-            {/* > */}
-            {/* Place Order */}
-            {/* </button> */}
-
-            {/* <PayPalScriptProvider options={initialOptions}>
-        <PayPalButtons
-          style={{
-            shape: "rect",
-            layout: "vertical",
-            color: "gold",
-            label: "paypal",
-          }}
-          createOrder={async () => {
-            try {
-              const response = await fetch("/api/orders", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                // use the "body" param to optionally pass additional order information
-                // like product ids and quantities
-                body: JSON.stringify({
-                  cart: [
-                    {
-                      id: "YOUR_PRODUCT_ID",
-                      quantity: "YOUR_PRODUCT_QUANTITY",
-                    },
-                  ],
-                }),
-              });
-
-              const orderData = await response.json();
-
-              if (orderData.id) {
-                return orderData.id;
-              } else {
-                const errorDetail = orderData?.details?.[0];
-                const errorMessage = errorDetail
-                  ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})`
-                  : JSON.stringify(orderData);
-
-                throw new Error(errorMessage);
-              }
-            } catch (error) {
-              console.error(error);
-              setMessage(`Could not initiate PayPal Checkout...${error}`);
-            }
-          }}
-          onApprove={async (data, actions) => {
-            try {
-              const response = await fetch(
-                `/api/orders/${data.orderID}/capture`,
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                }
-              );
-
-              const orderData = await response.json();
-              // Three cases to handle:
-              //   (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
-              //   (2) Other non-recoverable errors -> Show a failure message
-              //   (3) Successful transaction -> Show confirmation or thank you message
-
-              const errorDetail = orderData?.details?.[0];
-
-              if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
-                // (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
-                // recoverable state, per https://developer.paypal.com/docs/checkout/standard/customize/handle-funding-failures/
-                return actions.restart();
-              } else if (errorDetail) {
-                // (2) Other non-recoverable errors -> Show a failure message
-                throw new Error(
-                  `${errorDetail.description} (${orderData.debug_id})`
-                );
-              } else {
-                // (3) Successful transaction -> Show confirmation or thank you message
-                // Or go to another URL:  actions.redirect('thank_you.html');
-                const transaction =
-                  orderData.purchase_units[0].payments.captures[0];
-                setMessage(
-                  `Transaction ${transaction.status}: ${transaction.id}. See console for all available details`
-                );
-                console.log(
-                  "Capture result",
-                  orderData,
-                  JSON.stringify(orderData, null, 2)
-                );
-              }
-            } catch (error) {
-              console.error(error);
-              setMessage(
-                `Sorry, your transaction could not be processed...${error}`
-              );
-            }
-          }}
-        />
-      </PayPalScriptProvider> */}
+            
             <PayPalScriptProvider options={initialOptions}>
               <PayPalButtons 
               createOrder={async () => {
                 try {
-                  const response = await postData("order/add_address_for_order",{
+                  const userid = JSON.parse(localStorage.getItem("USER"))._id;
+                  // console.log("CARTITEM HERE:",cartItems)
+                  const response = await postData("order/add_order",{
                     //yhaan body dalni hai jo order kiska bnega
                     //orderStatus add kr dena jiska orderStatus:pending hoga
+                   "userid":userid,"items":cartItems,"totalamount":subtotal,"orderstatus":"pending","shippingid":shippingid
                   });
     
-                  const orderData = await response.json();
-    
-                  if (orderData.id) {
-                    return orderData.id;
+                  // const orderData = await response.json();
+                 console.log("SSSSSSSSSSSSSSSSSSSSS:",response)
+                  if (response.data._id) {
+                    
+                    // return actions.order.create({
+                    //   purchase_units: [
+                    //     {
+                    //       amount: {
+                    //         value: String(amount), // Specify the amount here
+                    //       },
+                    //     },
+                    //   ],
+                    // });
+
+                    return response.data._id
+                
+
                   } else {
                     const errorDetail = orderData?.details?.[0];
                     const errorMessage = errorDetail
@@ -544,7 +466,7 @@ const CheckoutOverlay = ({ show, onClose, totalprice }) => {
                   }
                 } catch (error) {
                   console.error(error);
-                  setMessage(`Could not initiate PayPal Checkout...${error}`);
+                  // setMessage(`Could not initiate PayPal Checkout...${error}`);
                 }
               }}
               onApprove={async (data, actions) => {

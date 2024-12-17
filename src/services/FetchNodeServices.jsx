@@ -50,12 +50,9 @@ const postData = async (url, body) => {
   } catch (e) {
     console.log("ereeeeeeeeeeeeeeeeeeeeeee:",e.response.data)
 
-    // jab token expire ho jayega tab ye call hoga. //
     if(e.response.status == 401)
     {
-        // alert("not login")
       localStorage.clear();
-      // window.location.replace("/login");
     }
 
     return  e.response?.data || e.message;
