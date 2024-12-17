@@ -8,6 +8,7 @@ import Cart from './screen/cart';
 import { AuthProvider } from './context/AuthContext'; 
 import  Loader  from '../src/components/Loader';
 import Shop from './screen/shop';
+import Categories from './components/Categories';
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
           <Route path="/cart" element={<Cart />} />
           <Route path="/loader" element={<Loader/>} />
           <Route path="/shop" element={<Shop/>} />
+          <Route path="/categories" element={<Categories/>} />
 
         </Routes>
       </Router>
