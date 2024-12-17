@@ -1,15 +1,17 @@
 import React, { useCallback, useState } from 'react';
 import orderSuccessImage from '../assets/ordersuccess.svg';
 import closeIcon from '../assets/icons/cancel.svg';
-import { postData, serverURL } from '../services/FetchNodeServices';
+import { deleteData, postData, serverURL } from '../services/FetchNodeServices';
 import { toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
-import { response } from 'express';
+import { useDispatch, useSelector } from 'react-redux';
+import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 
 const CheckoutOverlay = ({ show, onClose ,totalprice}) => {
   const orderData = useSelector((state) => state.orderData);
   const cartItems = Object.values(orderData || {});
   // console.log("CHECKING DATA IN ROOT REDUCER:",cartItems)
+  const dispatch = useDispatch();
+
   const [step, setStep] = useState(1);
   const [validfield,setValidField]=useState()
   const [loaderStatus,setLoaderStatus]=useState()
@@ -127,7 +129,7 @@ const CheckoutOverlay = ({ show, onClose ,totalprice}) => {
           setStep(3);
         }else if(paymentMethod == "cash on delivery")
         {
-          alert(paymentMethod)
+          
           const userid = JSON.parse(localStorage.getItem("USER"))._id
           const response = await postData('payment/add_payment_status_by_order', {"userid":userid,"paymentmode":paymentMethod,"paymentamount":subtotal,"transactiondetails":"NA"});
           if(response?.status)
@@ -135,10 +137,11 @@ const CheckoutOverlay = ({ show, onClose ,totalprice}) => {
             const orderresponse = await postData('order/add_address_for_order', {"userid":userid,"paymentid":response?.data?._id,"items":cartItems,"totalamount":subtotal,"orderstatus":"confirmed"});
             if(orderresponse?.status)
             {
+              await deleteData(`cart/remove-cart/${userid}`)
               setStep(3);
+              dispatch({ type: "RESET_ORDER" });
+              
             }
-            
-
           }
         }
         else{
@@ -170,7 +173,7 @@ const CheckoutOverlay = ({ show, onClose ,totalprice}) => {
       }
     }
   };
-
+  
 
 
   const handlePayment = useCallback(async(na) => {
@@ -243,6 +246,14 @@ const CheckoutOverlay = ({ show, onClose ,totalprice}) => {
      toast.error(response?.message)
     }
   }
+
+  const initialOptions = {
+    "client-id": import.meta.env.PAYPAL_CLIENT_ID,
+    "enable-funding": "venmo",
+    "buyer-country": "US",
+    currency: "USD",
+    components: "buttons",
+  };
 
   return (
     <div
@@ -367,16 +378,7 @@ const CheckoutOverlay = ({ show, onClose ,totalprice}) => {
             <label className="text-gray-700">Credit Card</label>
           </div>
 
-          <div className="flex items-center mb-4">
-            <input
-              type="radio"
-              value="razoparpay"
-              checked={paymentMethod === 'razoparpay'}
-              onChange={handlePaymentMethodChange}
-              className="mr-2"
-            />
-            <label className="text-gray-700">Razorpay</label>
-          </div>
+          
           <div className="flex items-center mb-4">
             <input
               type="radio"
@@ -398,12 +400,109 @@ const CheckoutOverlay = ({ show, onClose ,totalprice}) => {
             />
             <label className="text-gray-700">Cash On Delivery</label>
           </div>
-          <button
-            onClick={proceedToNextStep}
-            className="mt-4 w-full sm:w-auto h-16 bg-indigo-500 text-white rounded-full flex items-center justify-center"
-          >
-            Place Order
-          </button>
+          {/* <button */}
+            {/* onClick={proceedToNextStep} */}
+            {/* className="mt-4 w-full sm:w-auto h-16 bg-indigo-500 text-white rounded-full flex items-center justify-center" */}
+          {/* > */}
+            {/* Place Order */}
+          {/* </button> */}
+
+          <PayPalScriptProvider options={initialOptions}>
+        <PayPalButtons
+          style={{
+            shape: "rect",
+            layout: "vertical",
+            color: "gold",
+            label: "paypal",
+          }}
+          createOrder={async () => {
+            try {
+              const response = await fetch("/api/orders", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                // use the "body" param to optionally pass additional order information
+                // like product ids and quantities
+                body: JSON.stringify({
+                  cart: [
+                    {
+                      id: "YOUR_PRODUCT_ID",
+                      quantity: "YOUR_PRODUCT_QUANTITY",
+                    },
+                  ],
+                }),
+              });
+
+              const orderData = await response.json();
+
+              if (orderData.id) {
+                return orderData.id;
+              } else {
+                const errorDetail = orderData?.details?.[0];
+                const errorMessage = errorDetail
+                  ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})`
+                  : JSON.stringify(orderData);
+
+                throw new Error(errorMessage);
+              }
+            } catch (error) {
+              console.error(error);
+              setMessage(`Could not initiate PayPal Checkout...${error}`);
+            }
+          }}
+          onApprove={async (data, actions) => {
+            try {
+              const response = await fetch(
+                `/api/orders/${data.orderID}/capture`,
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                }
+              );
+
+              const orderData = await response.json();
+              // Three cases to handle:
+              //   (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
+              //   (2) Other non-recoverable errors -> Show a failure message
+              //   (3) Successful transaction -> Show confirmation or thank you message
+
+              const errorDetail = orderData?.details?.[0];
+
+              if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
+                // (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
+                // recoverable state, per https://developer.paypal.com/docs/checkout/standard/customize/handle-funding-failures/
+                return actions.restart();
+              } else if (errorDetail) {
+                // (2) Other non-recoverable errors -> Show a failure message
+                throw new Error(
+                  `${errorDetail.description} (${orderData.debug_id})`
+                );
+              } else {
+                // (3) Successful transaction -> Show confirmation or thank you message
+                // Or go to another URL:  actions.redirect('thank_you.html');
+                const transaction =
+                  orderData.purchase_units[0].payments.captures[0];
+                setMessage(
+                  `Transaction ${transaction.status}: ${transaction.id}. See console for all available details`
+                );
+                console.log(
+                  "Capture result",
+                  orderData,
+                  JSON.stringify(orderData, null, 2)
+                );
+              }
+            } catch (error) {
+              console.error(error);
+              setMessage(
+                `Sorry, your transaction could not be processed...${error}`
+              );
+            }
+          }}
+        />
+      </PayPalScriptProvider>
         </div>
       )}
   

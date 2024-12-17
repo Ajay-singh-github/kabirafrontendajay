@@ -1,4 +1,5 @@
-/** @type {import('tailwindcss').Config} */
+import scrollbarHide from 'tailwind-scrollbar-hide'
+
 export default {
   content: [
     "./index.html",
@@ -7,10 +8,10 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        hemera: ['Hemera'], 
-        inter: ['Inter', 'sans-serif'], 
+        hemera: ['Hemera'],
+        inter: ['Inter', 'sans-serif'],
       },
     },
   },
-  plugins: [require('tailwind-scrollbar-hide'),],
+  plugins: [scrollbarHide],
 }
