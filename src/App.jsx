@@ -7,7 +7,7 @@ import Pdp from './screen/Pdp';
 import Cart from './screen/cart'; 
 import { AuthProvider } from './context/AuthContext'; 
 import  Loader  from '../src/components/Loader';
-
+import Shop from './screen/shop';
 
 const App = () => {
   return (
@@ -20,6 +20,7 @@ const App = () => {
           <Route path="/product/:id" element={<Pdp />} /> 
           <Route path="/cart" element={<Cart />} />
           <Route path="/loader" element={<Loader/>} />
+          <Route path="/shop" element={<Shop/>} />
 
         </Routes>
       </Router>
