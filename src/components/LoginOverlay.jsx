@@ -20,7 +20,6 @@ const LoginOverlay = ({ show, onClose, onForgotPassword, onCreateAccount, setRef
       const backendCartResponse = await postData('cart/get_user_cart', { userid: userId });
       const backendCart = backendCartResponse?.data[0]?.cart || [];
       backendCart.map((item)=>{
-      // console.log("ITEMSSSSS:",+"productID"+item.productid._id+"categoryid "+item.productid.categoryid+"createdAt "+item.productid.createdAt+" description "+item.productid.description+" image "+item.productid.image+" name "+item.productid.name+ " regularprice "+item.productid.regularprice+" saleprice "+item.productid.saleprice+" sku "+item.productid.sku+" stockquantity "+item.productid.stockquantity+" tags "+item.productid.tags+" updateAt "+item.productid.updatedAt+" quantity "+item.quantity)
       dispatch({ type: 'ADD_ORDER', payload: [item.productid._id, { ...item.productid, quantity: item.quantity, }] });
 
 

@@ -16,24 +16,7 @@ const TopProducts = () => {
    }
 
    useEffect(()=>{fetchAllProduct()},[])
-  // const allProducts = [
-  //   { id: 1, name: 'Product 1', price: '$99.99', image: 'path/to/image1.png' },
-  //   { id: 2, name: 'Product 2', price: '$89.99', image: 'path/to/image2.png' },
-  //   { id: 3, name: 'Product 3', price: '$79.99', image: 'path/to/image3.png' },
-  //   { id: 4, name: 'Product 4', price: '$59.99', image: 'path/to/image4.png' },
-  //   { id: 5, name: 'Product 5', price: '$49.99', image: 'path/to/image5.png' },
-  //   { id: 6, name: 'Product 6', price: '$39.99', image: 'path/to/image6.png' },
-  //   { id: 7, name: 'Product 7', price: '$29.99', image: 'path/to/image7.png' },
-  //   { id: 8, name: 'Product 8', price: '$19.99', image: 'path/to/image8.png' },
-  //   { id: 9, name: 'Product 9', price: '$99.99', image: 'path/to/image9.png' },
-  //   { id: 10, name: 'Product 10', price: '$89.99', image: 'path/to/image10.png' },
-  //   { id: 11, name: 'Product 11', price: '$79.99', image: 'path/to/image11.png' },
-  //   { id: 12, name: 'Product 12', price: '$59.99', image: 'path/to/image12.png' },
-  //   { id: 13, name: 'Product 13', price: '$49.99', image: 'path/to/image13.png' },
-  //   { id: 14, name: 'Product 14', price: '$39.99', image: 'path/to/image14.png' },
-  //   { id: 15, name: 'Product 15', price: '$29.99', image: 'path/to/image15.png' },
-  //   { id: 16, name: 'Product 16', price: '$19.99', image: 'path/to/image16.png' },
-  // ];
+  
 
   const [visibleProducts, setVisibleProducts] = useState(allProducts.slice(0, 8));
   const [showAll, setShowAll] = useState(false); 

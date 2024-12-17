@@ -67,6 +67,7 @@ const Categories = () => {
   }
 
   return (
+    
     <section className="px-4 sm:px-6 lg:px-8 py-12 max-w-7xl mx-auto">
       <h2 className="font-['Plus_Jakarta_Sans'] text-3xl sm:text-4xl font-semibold mb-8 text-[#060607]">
         Categories

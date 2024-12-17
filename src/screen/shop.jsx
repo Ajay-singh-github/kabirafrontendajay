@@ -1,19 +1,11 @@
-
-
-
-
 import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
-import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ProductCard from "../components/ProductCard";
 import ShowMore from "../components/ShowMore";
 import searchIcon from "../assets/icons/search.svg";
 import chevronRight from "../assets/icons/chevron-right.svg";
 import dropdownIcon from "../assets/icons/drop-down.svg";
-import leftArrow from "../assets/icons/arrowleft.svg";
-import rightArrow from "../assets/icons/arrowright.svg";
-import { getData, postData } from "../services/FetchNodeServices";
+import { getData } from "../services/FetchNodeServices";
 import Loader from "../components/Loader"; 
 
 const Shop = () => {
@@ -71,14 +63,14 @@ const Shop = () => {
     setCurrent((prev) => (prev === 20 ? filteredProducts.length : 20));
   };
 
-  const handlePrevSlide = () => {
-    setCarouselIndex((prev) => (prev > 0 ? prev - 1 : 0));
-  };
+//   const handlePrevSlide = () => {
+//     setCarouselIndex((prev) => (prev > 0 ? prev - 1 : 0));
+//   };
 
-  const handleNextSlide = () => {
-    const maxIndex = Math.ceil(filteredProducts.length / productsPerSlide) - 1;
-    setCarouselIndex((prev) => (prev < maxIndex ? prev + 1 : prev));
-  };
+//   const handleNextSlide = () => {
+//     const maxIndex = Math.ceil(filteredProducts.length / productsPerSlide) - 1;
+//     setCarouselIndex((prev) => (prev < maxIndex ? prev + 1 : prev));
+//   };
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
@@ -90,7 +82,6 @@ const Shop = () => {
 
   return (
     <div>
-      <Navbar />
 
       <div className="py-20 text-center px-4 sm:px-8">
         <h1 className="mb-8 text-3xl sm:text-4xl font-bold text-gray-900">{displayTitle}</h1>

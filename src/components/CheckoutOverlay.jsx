@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import orderSuccessImage from "../assets/ordersuccess.svg";
 import closeIcon from "../assets/icons/cancel.svg";
 import { deleteData, postData, serverURL } from "../services/FetchNodeServices";

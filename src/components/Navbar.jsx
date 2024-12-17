@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import cartIcon from '../assets/cart.svg';
 import userIcon from '../assets/icons/user.png'; 
@@ -9,6 +9,7 @@ import LoginOverlay from './LoginOverlay';
 
 const Navbar = () => {
   var dispatch = useDispatch()
+  var navigate = useNavigate()
   const [showLoginPage, setShowLoginPage] = useState(false);
   const [showCreateAccountPage, setShowCreateAccountPage] = useState(false);
   const [showForgotPasswordPage, setShowForgotPasswordPage] = useState(false);
@@ -76,16 +77,20 @@ const Navbar = () => {
     setRefresh(!refresh);  
   };
 
+  const handleNavigate=()=>{
+    navigate('/')
+  }
+
   return (
     <>
       <nav className="flex justify-between items-center px-6 sm:px-10 lg:px-20 h-16 bg-white text-black z-50">
-        <div className="text-4xl font-light font-hemera text-gray-700">Kabira</div>
+        <div className="text-4xl font-light font-hemera text-gray-700 cursor-pointer" onClick={handleNavigate}>Kabira</div>
 
         {/* Desktop Navigation */}
         <ul className="hidden lg:flex space-x-8">
           <li><Link to="/" className="text-base font-semibold hover:text-gray-600">Home</Link></li>
           <li><Link to="/shop" className="text-base font-semibold hover:text-gray-600">Shop</Link></li>
-          <li><Link to="/Categories" className="text-base font-semibold hover:text-gray-600">Categories</Link></li>
+          <li><Link to="/categories" className="text-base font-semibold hover:text-gray-600">Categories</Link></li>
         </ul>
 
         {/* User and Cart Section */}

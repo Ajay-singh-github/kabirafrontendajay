@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ProductCard from "../components/ProductCard";
 import ShowMore from "../components/ShowMore";
@@ -88,7 +87,7 @@ const PlpPage = () => {
 
   return (
     <div>
-      <Navbar />
+      
 
       <div className="py-20 text-center px-4 sm:px-8">
         <h1 className="mb-8 text-3xl sm:text-4xl font-bold text-gray-900">{displayTitle}</h1>

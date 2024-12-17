@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Navbar from '../components/Navbar';
 import ProductCarousel from '../components/ProductCarousel';
 import Footer from '../components/Footer';
 import { Link } from 'react-router-dom';
@@ -16,7 +15,7 @@ const Cart = () => {
   const [status, setStatus] = useState(false);
   const [showLoginPage, setShowLoginPage] = useState(false);
 
-  const [isCheckoutOverlayOpen, setCheckoutOverlayOpen] = useState(true);
+  const [isCheckoutOverlayOpen, setCheckoutOverlayOpen] = useState(false);
   const [refresh, setRefresh] = useState(false);  
 
   // Calculations
@@ -129,7 +128,6 @@ const Cart = () => {
 
   return (
     <div>
-      <Navbar cartItemCount={cartItems.length} />
 
       <div className="p-4 sm:p-8 md:p-16 lg:px-20">
         <div className="text-gray-600 mb-4 md:mb-8">

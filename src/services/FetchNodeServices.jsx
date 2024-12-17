@@ -1,6 +1,4 @@
 import axios from "axios";
-
-
 var serverURL = "http://localhost:3000";
 const getData = async (url) => {
   try {

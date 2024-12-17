@@ -9,11 +9,16 @@ import { AuthProvider } from './context/AuthContext';
 import  Loader  from '../src/components/Loader';
 import Shop from './screen/shop';
 import Categories from './components/Categories';
+import Navbar from './components/Navbar';
 
 const App = () => {
   return (
+    <>
+   
     <AuthProvider> 
+      
       <Router>
+      <Navbar/>
         <Routes>
           
           <Route path="/" element={<Landingpage />} />  
@@ -27,6 +32,7 @@ const App = () => {
         </Routes>
       </Router>
     </AuthProvider>
+    </>
   );
 }
 
