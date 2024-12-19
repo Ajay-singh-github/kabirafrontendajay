@@ -1,5 +1,5 @@
 import axios from "axios";
-var serverURL = "http://kbrbackend-a11h07jty-rishav-bhardwazs-projects.vercel.app";
+var serverURL = "https://kabirabackend.onrender.com";
 const getData = async (url) => {
   try {
 
