@@ -70,6 +70,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('USER');
+    localStorage.removeItem('TOKEN');
     localStorage.removeItem('orderData');
     dispatch({ type: 'RESET_ORDER' });
     setUser(null);  
@@ -79,6 +80,10 @@ const Navbar = () => {
 
   const handleNavigate=()=>{
     navigate('/')
+  }
+
+  const handleOrderComponent=()=>{
+    navigate("/order")
   }
 
   return (
@@ -118,6 +123,13 @@ const Navbar = () => {
               {showDropdown && (
                 <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md text-sm border border-gray-200">
                   <div className="px-4 py-2 text-gray-700 font-semibold">{user?.name || 'User'}</div>
+                  <button
+                    onClick={handleOrderComponent}
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100 text-green-500"
+                  >
+                    Orders
+                  </button>
+                  
                   <button
                     onClick={handleLogout}
                     className="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-500"

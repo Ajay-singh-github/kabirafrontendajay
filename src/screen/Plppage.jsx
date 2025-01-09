@@ -25,7 +25,7 @@ const PlpPage = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
 
   const productsPerSlide = 4;
-
+  console.log("XXXXXXXXXXXXXXXXX:",categoryid)
   const fetchProductByCategoryId = async () => {
     setLoading(true);
     try {

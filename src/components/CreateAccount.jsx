@@ -4,14 +4,16 @@ import createAccImage from '../assets/createacc.svg';
 import googleIcon from '../assets/icons/google.svg';
 import appleIcon from '../assets/icons/apple.svg';
 import { postData } from '../services/FetchNodeServices';
+import { toast } from 'react-toastify';
 
 const CreateAccount = ({ onClose, onLoginClick }) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [phonenumber,setPhoneNumber]=useState()
+  const [phonenumber, setPhoneNumber] = useState('');
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false); // Loader state
 
   const handleCreateAccount = async () => {
     if (!username || !email || !password || !phonenumber) {
@@ -19,36 +21,43 @@ const CreateAccount = ({ onClose, onLoginClick }) => {
       return;
     }
 
+    setIsLoading(true); // Start loader
     try {
-      
-      // alert(username+" "+email+" "+password+" "+phonenumber)
-      const response = await postData("user/create_user",{"name":username,"emailid":email,"password":password,"phonenumber":phonenumber,"role":'user',address:""})
-      if(response?.status){
-       alert(response?.message)
-       setSuccessMessage(response?.message);
-      setError('');
-      setUsername('');
-      setEmail('');
-      setPassword('');
+      const response = await postData("user/create_user", {
+        name: username,
+        emailid: email,
+        password: password,
+        phonenumber: phonenumber,
+        role: 'user',
+        address: ''
+      });
 
-      }else{
-        alert(response?.message)
+      if (response?.status) {
+        toast(response?.message);
+        setSuccessMessage(response?.message);
+        setError('');
+        setUsername('');
+        setEmail('');
+        setPassword('');
+        setPhoneNumber('');
+      } else {
+        toast.error(response?.message);
       }
-      
 
       setTimeout(() => {
         onClose();
-      }, 2000); 
+      }, 2000);
     } catch (error) {
-      setError(error.message); 
-      setSuccessMessage(''); 
+      setError(error.message);
+      setSuccessMessage('');
+    } finally {
+      setIsLoading(false); // Stop loader
     }
-  }
+  };
 
-  
   const handleGoogleLogin = () => {
     console.log('Google Login Clicked');
-    window.location.href = 'http://localhost:8000/auth/google'; 
+    window.location.href = 'http://localhost:8000/auth/google';
   };
 
   const handlePhoneAuth = () => {
@@ -100,14 +109,21 @@ const CreateAccount = ({ onClose, onLoginClick }) => {
           placeholder="Enter your mobile number"
           className="w-full md:w-[353px] h-[64px] p-4 rounded-3xl border border-gray-300 mb-6 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-300"
           value={phonenumber}
-          
           onChange={(e) => setPhoneNumber(e.target.value)}
         />
 
         {error && <p className="text-red-500 mb-4">{error}</p>}
         {successMessage && <p className="text-green-500 mb-4">{successMessage}</p>}
 
-        <button onClick={handleCreateAccount} className="w-full md:w-[353px] h-[64px] bg-indigo-500 text-white rounded-full mb-4">Create Account</button>
+        <button
+          onClick={handleCreateAccount}
+          className="w-full md:w-[353px] h-[64px] bg-indigo-500 text-white rounded-full mb-4"
+          disabled={isLoading} // Disable during loading
+        >
+          {isLoading ? 'Creating...' : 'Create Account'}
+        </button>
+
+        {isLoading && <div className="loader mb-4"></div>} {/* Loader */}
 
         <div className="flex items-center my-4">
           <hr className="flex-grow border-t border-gray-300" />
@@ -115,7 +131,7 @@ const CreateAccount = ({ onClose, onLoginClick }) => {
           <hr className="flex-grow border-t border-gray-300" />
         </div>
 
-        <button 
+        <button
           className="w-[353px] h-[64px] border border-gray-300 rounded-full mb-6 flex items-center justify-center space-x-2"
           onClick={handleGoogleLogin}>
           <img src={googleIcon} alt="Google" />

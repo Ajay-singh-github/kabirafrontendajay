@@ -10,6 +10,7 @@ import  Loader  from '../src/components/Loader';
 import Shop from './screen/shop';
 import Categories from './components/Categories';
 import Navbar from './components/Navbar';
+import Orders from './components/order';
 
 const App = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
           <Route path="/loader" element={<Loader/>} />
           <Route path="/shop" element={<Shop/>} />
           <Route path="/categories" element={<Categories/>} />
+          <Route path="/order" element={<Orders/>} />
 
         </Routes>
       </Router>

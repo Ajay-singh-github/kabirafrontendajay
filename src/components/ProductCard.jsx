@@ -56,9 +56,8 @@ const ProductCard = ({ product }) => {
           <span className="text-[#2E2F33] font-medium text-[18px] leading-normal overflow-hidden text-ellipsis whitespace-nowrap w-[150px] mt-4">
             {product.name}
           </span>
-          <span className="flex justify-center items-center w-[64px] h-[38px] px-3.5 py-2 text-[16px] font-medium text-[#2E2F33] bg-[#F3F4F7] rounded-full mt-3 ml-6">
-            <span>&#8377;</span>{product.saleprice}
-          </span>
+          <span className="flex justify-center gap-3 items-center w-[64px] h-[38px] px-3.5 py-2 text-[16px] font-medium text-[#2E2F33] bg-[#F3F4F7] rounded-full mt-3 ml-6 px-8">
+            <span>&#8377;</span><s >{product.regularprice}</s>{product.saleprice}</span>
         </div>
         <div className="flex gap-2 mt-2">
           <span className="w-4 h-4 rounded-full" style={{ backgroundColor: 'red' }}></span>

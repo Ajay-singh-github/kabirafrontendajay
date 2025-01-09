@@ -5,7 +5,7 @@ import Loader from './Loader'; // Import the Loader component
 
 const CategoryCard = ({ title, image, isWide = false, categoryid }) => {
   const navigate = useNavigate();
-
+ 
   return (
     <div
       className={`relative bg-[#F3F4F7] rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300

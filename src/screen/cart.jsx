@@ -17,7 +17,7 @@ const Cart = () => {
 
   const [isCheckoutOverlayOpen, setCheckoutOverlayOpen] = useState(false);
   const [refresh, setRefresh] = useState(false);  
-
+  console.log("CART ITEMS",cartItems)
   // Calculations
   const totalPrice = cartItems.reduce((total, item) => total + item.regularprice * item.quantity, 0);
   const totalDiscount = cartItems.reduce((total, item) => total + (item.regularprice - item.saleprice) * item.quantity, 0);
@@ -141,15 +141,15 @@ const Cart = () => {
           cartItems.map((item) => (
             <div key={item._id} className="flex flex-col md:flex-row mb-12">
               <img
-                src={`${serverURL}/images/${item.image}` || 'placeholder-image.jpg'}
+                src={`${serverURL}/images/${item?.image[0]}` || 'placeholder-image.jpg'}
                 alt={item.name}
                 className="w-40 h-40 sm:w-60 sm:h-60 md:w-72 md:h-72 lg:w-96 lg:h-96 object-cover mx-auto md:mx-0"
               />
               <div className="mt-4 md:mt-0 md:ml-8 lg:ml-36 pl-4 md:pl-8 pr-4 flex-1">
                 <h2 className="text-gray-800 text-xl md:text-2xl lg:text-3xl font-medium">{item.name}</h2>
-                <div className="flex items-center mb-4">
+                <div className="flex items-center mb-4 mt-2">
                   <span className="text-indigo-600 text-lg md:text-xl lg:text-2xl font-semibold">
-                    ₹{item?.saleprice?.toFixed(2)}
+                    ₹<s className='mr-4'>{item?.regularprice?.toFixed(2)}</s>{item?.saleprice?.toFixed(2)}
                   </span>
                 </div>
                 <p className="text-gray-600 mb-4 text-sm md:text-base">{item.description}</p>
@@ -224,6 +224,8 @@ const Cart = () => {
         onClose={handleCloseLogin}
         refresh={refresh}  
         setRefresh={setRefresh}
+        onForgotPassword={handleForgotPasswordClick}
+        onCreateAccount={handleCreateAccountClick} 
       />
 
       <ProductCarousel products={cartItems} />

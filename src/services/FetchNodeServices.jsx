@@ -1,5 +1,7 @@
 import axios from "axios";
+// var serverURL = "https://kb-aps2.onrender.com";
 var serverURL = "https://kabirabackend.onrender.com";
+// var serverURL = "http://localhost:3000";
 const getData = async (url) => {
   try {
 

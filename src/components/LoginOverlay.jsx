@@ -12,21 +12,21 @@ const LoginOverlay = ({ show, onClose, onForgotPassword, onCreateAccount, setRef
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // New state for loader
 
   const mergeCartData = async (userId) => {
     try {
-     
-      
       const backendCartResponse = await postData('cart/get_user_cart', { userid: userId });
       const backendCart = backendCartResponse?.data[0]?.cart || [];
-      backendCart.map((item)=>{
-      dispatch({ type: 'ADD_ORDER', payload: [item.productid._id, { ...item.productid, quantity: item.quantity, }] });
-
-
-      })
-
-      
-      
+      backendCart.map((item) => {
+        dispatch({
+          type: 'ADD_ORDER',
+          payload: [
+            item.productid._id,
+            { ...item.productid, quantity: item.quantity },
+          ],
+        });
+      });
     } catch (error) {
       console.error('Error syncing cart:', error);
       toast.error('Failed to sync cart. Please try again later.');
@@ -34,12 +34,12 @@ const LoginOverlay = ({ show, onClose, onForgotPassword, onCreateAccount, setRef
   };
 
   const handleLogin = async () => {
+    setLoading(true); // Start loader
     try {
       const response = await postData('login/user_login', { emailid: email, password });
       if (response?.status) {
         toast(response?.message);
-        localStorage.setItem("TOKEN", response?.token);
-        console.log("TOKEN AA RHA HAI:",response.token)
+        localStorage.setItem('TOKEN', response?.token);
         localStorage.setItem('USER', JSON.stringify(response?.data));
         await mergeCartData(response?.data._id); // Sync the cart
         setRefresh(!refresh);
@@ -52,6 +52,8 @@ const LoginOverlay = ({ show, onClose, onForgotPassword, onCreateAccount, setRef
     } catch (err) {
       setError('Login failed. Please check your credentials and try again.');
       console.error('Error logging in:', err);
+    } finally {
+      setLoading(false); // Stop loader
     }
   };
 
@@ -102,10 +104,15 @@ const LoginOverlay = ({ show, onClose, onForgotPassword, onCreateAccount, setRef
         </div>
 
         <button
-          className="w-full max-w-[353px] h-[50px] sm:h-[64px] bg-indigo-500 text-white rounded-full mb-8"
+          className="w-full max-w-[353px] h-[50px] sm:h-[64px] bg-indigo-500 text-white rounded-full mb-8 flex items-center justify-center"
           onClick={handleLogin}
+          disabled={loading} // Disable button while loading
         >
-          Login
+          {loading ? (
+            <span className="loader animate-spin border-2 border-white border-t-indigo-600 rounded-full w-5 h-5 mr-2"></span>
+          ) : (
+            'Login'
+          )}
         </button>
 
         <div className="text-center w-full mb-8 text-sm sm:text-base text-gray-400">OR</div>
