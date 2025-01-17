@@ -28,7 +28,7 @@ const CategoryCard = ({ title, image, isWide = false, categoryid }) => {
         </div>
         <div className="w-1/2 flex justify-end">
           <img
-            src={`${serverURL}/images/${image}`}
+            src={image}
             alt={title}
             className="object-contain h-full max-h-[280px] md:max-h-[320px]"
           />
@@ -48,6 +48,7 @@ const Categories = () => {
       const result = await getData('category/get_all_category');
       if (result?.status) {
         setCategories(result?.data);
+        console.log("EEEEEEEEEEEEEEEEEEEE:",result.data)
       } else {
         alert(result?.status);
       }

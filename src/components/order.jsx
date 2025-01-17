@@ -151,7 +151,7 @@ const Orders = () => {
                       <span>{order.item}</span>
                       {order.items?.map((item)=>(
                         
-                        <li>{item.name} <span className="ml-6">qty:{item?.quantity}</span></li>
+                        <li>{item.name} <span className="ml-7">qty:{item?.quantity}</span></li>
                      
                      ))
                     }

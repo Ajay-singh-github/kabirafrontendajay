@@ -141,7 +141,7 @@ const Cart = () => {
           cartItems.map((item) => (
             <div key={item._id} className="flex flex-col md:flex-row mb-12">
               <img
-                src={`${serverURL}/images/${item?.image[0]}` || 'placeholder-image.jpg'}
+                src={`${item?.image[0]} || 'placeholder-image.jpg'`}
                 alt={item.name}
                 className="w-40 h-40 sm:w-60 sm:h-60 md:w-72 md:h-72 lg:w-96 lg:h-96 object-cover mx-auto md:mx-0"
               />

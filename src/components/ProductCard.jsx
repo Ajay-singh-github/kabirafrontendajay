@@ -47,7 +47,7 @@ const ProductCard = ({ product }) => {
   return (
     <div className="bg-white rounded-lg flex flex-col justify-between h-[383px] transition-transform duration-300 hover:scale-105 relative group">
       <img
-        src={`${serverURL}/images/${product.image[0]}`}
+        src={product.image[0]}
         alt={product.name}
         className="w-full h-[313px] bg-gray-300"
       />

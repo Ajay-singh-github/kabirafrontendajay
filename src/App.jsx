@@ -11,6 +11,7 @@ import Shop from './screen/shop';
 import Categories from './components/Categories';
 import Navbar from './components/Navbar';
 import Orders from './components/order';
+import Paypay from './components/demo';
 
 const App = () => {
   return (
@@ -30,6 +31,7 @@ const App = () => {
           <Route path="/shop" element={<Shop/>} />
           <Route path="/categories" element={<Categories/>} />
           <Route path="/order" element={<Orders/>} />
+          <Route path="/demo" element={<Paypay/>} />
 
         </Routes>
       </Router>
