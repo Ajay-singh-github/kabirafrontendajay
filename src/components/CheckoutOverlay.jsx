@@ -5,6 +5,7 @@ import { deleteData, postData, serverURL } from "../services/FetchNodeServices";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
+import { AwardIcon } from "lucide-react";
 
 const CheckoutOverlay = ({ show, onClose, totalprice }) => {
   const orderData = useSelector((state) => state.orderData);
@@ -37,18 +38,18 @@ const CheckoutOverlay = ({ show, onClose, totalprice }) => {
     { code: "+44", name: "United Kingdom" },
   ]);
 
-  const totalPrice = cartItems.reduce(
-    (total, item) => total + item.regularprice * item.quantity,
-    0
-  );
-  const totalDiscount = cartItems.reduce(
-    (total, item) =>
-      total + (item.regularprice - item.saleprice) * item.quantity,
-    0
-  );
-  const totalDiscountPercentage =
-    totalPrice > 0 ? (totalDiscount / totalPrice) * 100 : 0;
-  const subtotal = totalPrice - totalDiscount;
+  // const totalPrice = cartItems.reduce(
+  //   (total, item) => total + item.regularprice * item.quantity,
+  //   0
+  // );
+  // const totalDiscount = cartItems.reduce(
+  //   (total, item) =>
+  //     total + (item.regularprice - item.saleprice) * item.quantity,
+  //   0
+  // );
+  // const totalDiscountPercentage =
+  //   totalPrice > 0 ? (totalDiscount / totalPrice) * 100 : 0;
+  // const subtotal = totalPrice - totalDiscount;
 
   const validation = () => {
     let status = true;
@@ -112,6 +113,9 @@ const CheckoutOverlay = ({ show, onClose, totalprice }) => {
             { userid: userid, address: JSON.stringify(address) }
           );
           if (response?.status) {
+            // setShippingId(response?.data?._id)
+            console.log("SSSSSSSSSSSSSSSSSSSSEEEEEEEEEEEEE:",response?.data?._id)
+
             setStep(2);
           } else {
             toast("Something is wrong.");
@@ -279,7 +283,7 @@ const CheckoutOverlay = ({ show, onClose, totalprice }) => {
     currency: "USD",
     components: "buttons",
   };
-
+ 
   // alert(import.meta.env.VITE_PAYPAL_CLIENT_ID)
   // const showAddress=async()=>{
   //   try {
@@ -300,7 +304,8 @@ const CheckoutOverlay = ({ show, onClose, totalprice }) => {
 
   // }
 
-
+  // alert(shippingid)
+  console.log("SSSSSSSSSSSSSSSEEEEEEEEEEEEEE",shippingid)
 
   return (
     <div
@@ -524,7 +529,7 @@ const CheckoutOverlay = ({ show, onClose, totalprice }) => {
                 createOrder={async (data, actions) => {
                   try {
                     const userid = JSON.parse(localStorage.getItem("USER"))._id;
-
+                   console.log("USERID"+userid+"items"+items+"totalamouont"+totalamount+"shippingid"+shippingid)
                     const response = await postData("order/add_order", {
                       userid,
                       items: cartItems,
@@ -556,6 +561,9 @@ const CheckoutOverlay = ({ show, onClose, totalprice }) => {
                       });
 
                       console.log("Created PayPal Order:", createdOrder);
+                      await postData("/remove-cart",{"userid":orderID})
+                      localStorage.removeItem("orderData")
+                      
                       return createdOrder;
                     } else {
                       console.error("Invalid backend response:", response);
@@ -572,7 +580,7 @@ const CheckoutOverlay = ({ show, onClose, totalprice }) => {
                     const orderID = localStorage.getItem("ORDER_ID");
                     const captureResult = await actions.order.capture();
                     console.log("Transaction successfully captured:", captureResult);
-
+                    
                     const paymentData = {
                       userid: userid, 
                       paymentmode: "paypal", 
@@ -585,13 +593,7 @@ const CheckoutOverlay = ({ show, onClose, totalprice }) => {
                      const response = await postData("/add_payments",JSON.stringify(paymentData))
 
 
-                    // const response = await fetch("https://your-backend-api.com/api/payments", {
-                    //   method: "POST",
-                    //   headers: {
-                    //     "Content-Type": "application/json",
-                    //   },
-                    //   body: JSON.stringify(paymentData),
-                    // });
+                    
 
                     if (response.ok) {
                       alert("Payment successful! Your order is confirmed.");

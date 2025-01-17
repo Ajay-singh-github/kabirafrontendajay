@@ -4,7 +4,7 @@ import Footer from '../components/Footer';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import CheckoutOverlay from '../components/CheckoutOverlay';
-import { postData, serverURL } from '../services/FetchNodeServices';
+import { postData} from '../services/FetchNodeServices';
 import { toast } from 'react-toastify';
 import LoginOverlay from '../components/LoginOverlay';
 
@@ -139,12 +139,14 @@ const Cart = () => {
 
         {cartItems.length > 0 ? (
           cartItems.map((item) => (
+      
             <div key={item._id} className="flex flex-col md:flex-row mb-12">
               <img
-                src={`${item?.image[0]} || 'placeholder-image.jpg'`}
+                src={item?.image[0]}
                 alt={item.name}
                 className="w-40 h-40 sm:w-60 sm:h-60 md:w-72 md:h-72 lg:w-96 lg:h-96 object-cover mx-auto md:mx-0"
               />
+           
               <div className="mt-4 md:mt-0 md:ml-8 lg:ml-36 pl-4 md:pl-8 pr-4 flex-1">
                 <h2 className="text-gray-800 text-xl md:text-2xl lg:text-3xl font-medium">{item.name}</h2>
                 <div className="flex items-center mb-4 mt-2">
