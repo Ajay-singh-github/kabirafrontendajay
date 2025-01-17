@@ -132,7 +132,7 @@ const Orders = () => {
                   <th className="py-3 px-6 text-left">Item </th>
                   <th className="py-3 px-6 text-left">Quatity</th>
                   <th className="py-3 px-6 text-left">Total Amount</th>
-                  <th className="py-3 px-6 text-left">Address</th>
+                  {/* <th className="py-3 px-6 text-left">Address</th> */}
                   <th className="py-3 px-6 text-left">Order Status</th>
                   <th className="py-3 px-6 text-left">Payment Status</th>
                   {orders.some(order => order.orderstatus === 'completed') && (
@@ -176,11 +176,11 @@ const Orders = () => {
 
                     </td>
 
-                    <td className="py-3 px-6 text-left">
+                    {/* <td className="py-3 px-6 text-left">
 
-                      {/* {JSON.parse(order?.shippingid.address).address + ", " + JSON.parse(order?.shippingid.address).city + ", " + JSON.parse(order?.shippingid.address).state + ", pincode " + JSON.parse(order?.shippingid.address).pincode + ", Phone Number " + JSON.parse(order?.shippingid.address).phonenumber} */}
+                      {JSON.parse(order?.shippingid.address).address + ", " + JSON.parse(order?.shippingid.address).city + ", " + JSON.parse(order?.shippingid.address).state + ", pincode " + JSON.parse(order?.shippingid.address).pincode + ", Phone Number " + JSON.parse(order?.shippingid.address).phonenumber}
 
-                    </td>
+                    </td> */}
 
 
                     <td className="py-3 px-6 text-left">
