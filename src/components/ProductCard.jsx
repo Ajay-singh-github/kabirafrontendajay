@@ -2,8 +2,10 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { postData, serverURL } from '../services/FetchNodeServices';
+import { useNavigate } from 'react-router-dom';
 
 const ProductCard = ({ product }) => {
+  var navigate = useNavigate()
   const dispatch = useDispatch();
   const orderData = useSelector(state => state.orderData);
   const productInCart = orderData[product._id];
@@ -44,19 +46,24 @@ const ProductCard = ({ product }) => {
     handleAddIncreaseDecrease(0)
   };
 
+  const handleClick = (e) => {
+    navigate("/productpage", { state: { product } });
+  };
   return (
     <div className="bg-white rounded-lg flex flex-col justify-between h-[383px] transition-transform duration-300 hover:scale-105 relative group">
       <img
         src={product.image[0]}
         alt={product.name}
-        className="w-full h-[313px] bg-gray-300"
+        // className="w-full h-[313px] bg-gray-300 "
+        className="w-full h-[313px] bg-gray-300 "
+        onClick={(e)=>handleClick(e)}
       />
       <div className="flex flex-col justify-start flex-grow p-4 bg-white">
         <div className="flex justify-between items-center">
           <span className="text-[#2E2F33] font-medium text-[18px] leading-normal overflow-hidden text-ellipsis whitespace-nowrap w-[150px] mt-4">
             {product.name}
           </span>
-          <span className="flex justify-center   gap-3 items-center w-[100px] h-[38px] px-3.5 py-2 text-[16px] font-medium text-[#2E2F33] bg-[#F3F4F7] rounded-full mt-3 ml-6 px-8">
+          <span className="flex justify-center   gap-3 items-center w-[100px] h-[38px]  py-2 text-[16px] font-medium text-[#2E2F33] bg-[#F3F4F7] rounded-full mt-3 ml-6 px-8">
             <span>&#8377;</span><s >{product.regularprice}</s>{product.saleprice}
           </span>
         </div>

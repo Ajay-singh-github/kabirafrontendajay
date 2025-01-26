@@ -6,7 +6,7 @@ const Herosection = () => {
   return (
     <section className="h-screen bg-white flex items-center justify-center text-center text-black px-6 py-6 md:px-20 md:py-20 box-content">
       <div className="max-w-full md:max-w-[1280px]">
-        <div className="text-4xl font-light font-hemera text-gray-700 mb-2" >Kabira Gallery</div>
+        <div className="text-4xl font-light font-hemera text-gray-700 mb-2" ><span className='text-[#94016b]'>K</span>abira <span className='text-[#94016b]'>G</span>allery</div>
 
         <h1 className="font-['Plus_Jakarta_Sans'] text-3xl md:text-6xl font-bold leading-[1.3] md:leading-[1.1] mb-6">
           Discover the Artistry of Modern Contemporary Art & Crafts

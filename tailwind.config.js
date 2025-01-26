@@ -10,7 +10,7 @@ export default {
       fontFamily: {
         hemera: ['Hemera'],
         inter: ['Inter', 'sans-serif'],
-      },
+      }
     },
   },
   plugins: [scrollbarHide],

@@ -12,6 +12,7 @@ import Categories from './components/Categories';
 import Navbar from './components/Navbar';
 import Orders from './components/order';
 import Paypay from './components/demo';
+import ProductPage from './screen/ProductPage';
 
 const App = () => {
   return (
@@ -32,6 +33,7 @@ const App = () => {
           <Route path="/categories" element={<Categories/>} />
           <Route path="/order" element={<Orders/>} />
           <Route path="/demo" element={<Paypay/>} />
+          <Route path="/productpage" element={<ProductPage/>} />
 
         </Routes>
       </Router>

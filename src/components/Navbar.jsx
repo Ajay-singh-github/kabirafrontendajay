@@ -89,7 +89,7 @@ const Navbar = () => {
   return (
     <>
       <nav className="flex justify-between items-center px-6 sm:px-10 lg:px-20 h-16 bg-white text-black z-50">
-        <div className="text-4xl font-light font-hemera text-gray-700 cursor-pointer" onClick={handleNavigate}>Kabira</div>
+        <div className="text-4xl font-light font-hemera text-gray-700 cursor-pointer" onClick={handleNavigate}><span className='text-[#94016b]'>K</span>abira</div>
 
         {/* Desktop Navigation */}
         <ul className="hidden lg:flex space-x-8">

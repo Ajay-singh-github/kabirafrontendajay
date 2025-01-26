@@ -334,7 +334,7 @@ const CheckoutOverlay = ({ show, onClose, totalprice }) => {
         )}
 
         {loggedIn && step === 1 && (
-          <div className="flex flex-col justify-start items-start gap-4 sm:gap-6 inline-flex">
+          <div className="flex-col justify-start items-start gap-4 sm:gap-6 inline-flex">
             <div className="text-[#5f6980] text-lg sm:text-xl font-semibold font-['Inter']">
               Shipping Address
             </div>
@@ -420,7 +420,7 @@ const CheckoutOverlay = ({ show, onClose, totalprice }) => {
         )}
 
         {step === 2 && loggedIn && (
-          <div className="flex flex-col justify-start items-start gap-4 sm:gap-6 inline-flex">
+          <div className=" flex-col justify-start items-start gap-4 sm:gap-6 inline-flex">
             <div className="text-[#5f6980] text-lg sm:text-xl font-semibold font-['Inter']">
               Payment Method
             </div>
